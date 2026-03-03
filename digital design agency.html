@@ -1,0 +1,1323 @@
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZENTR — Design Experiment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Syne:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400&amp;display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #050505;
+      color: #e5e5e5;
+    }
+
+    .font-syne {
+      font-family: 'Syne', sans-serif;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Custom Text Sizes */
+    .text-huge {
+      font-size: clamp(3rem, 11vw, 20rem);
+    }
+
+    /* Animations */
+    @keyframes beam-drop {
+      0% {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(500%);
+        opacity: 0;
+      }
+    }
+
+    .animate-beam {
+      animation: beam-drop 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes border-spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .animate-border-spin {
+      animation: border-spin 3s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .animate-marquee-infinite {
+      animation: marquee 40s linear infinite;
+    }
+
+    .animate-marquee-infinite:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes fadeInUpBlur {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(10px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeInUpBlur 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    .reveal-hidden {
+      opacity: 0;
+    }
+
+    /* Glassmorphism Card Utility */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Glass Section Utility */
+    .glass-section {
+      background: rgba(10, 10, 10, 0.65);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 3px;
+    }
+  </style>
+  <link id="all-fonts-link-font-geist" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-geist">
+    .font-geist {
+      font-family: 'Geist', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-roboto" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-roboto">
+    .font-roboto {
+      font-family: 'Roboto', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-montserrat" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-montserrat">
+    .font-montserrat {
+      font-family: 'Montserrat', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-poppins" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-poppins">
+    .font-poppins {
+      font-family: 'Poppins', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-playfair" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap">
+  <style id="all-fonts-style-font-playfair">
+    .font-playfair {
+      font-family: 'Playfair Display', serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-instrument-serif" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-instrument-serif">
+    .font-instrument-serif {
+      font-family: 'Instrument Serif', serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-merriweather" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap">
+  <style id="all-fonts-style-font-merriweather">
+    .font-merriweather {
+      font-family: 'Merriweather', serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-bricolage" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-bricolage">
+    .font-bricolage {
+      font-family: 'Bricolage Grotesque', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-jakarta" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap">
+  <style id="all-fonts-style-font-jakarta">
+    .font-jakarta {
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-manrope" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap">
+  <style id="all-fonts-style-font-manrope">
+    .font-manrope {
+      font-family: 'Manrope', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-space-grotesk" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-space-grotesk">
+    .font-space-grotesk {
+      font-family: 'Space Grotesk', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-work-sans" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap">
+  <style id="all-fonts-style-font-work-sans">
+    .font-work-sans {
+      font-family: 'Work Sans', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-pt-serif" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap">
+  <style id="all-fonts-style-font-pt-serif">
+    .font-pt-serif {
+      font-family: 'PT Serif', serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-geist-mono" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-geist-mono">
+    .font-geist-mono {
+      font-family: 'Geist Mono', monospace !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-space-mono" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap">
+  <style id="all-fonts-style-font-space-mono">
+    .font-space-mono {
+      font-family: 'Space Mono', monospace !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-quicksand" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-quicksand">
+    .font-quicksand {
+      font-family: 'Quicksand', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-nunito" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap">
+  <style id="all-fonts-style-font-nunito">
+    .font-nunito {
+      font-family: 'Nunito', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-newsreader" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..800&amp;display=swap">
+  <style id="all-fonts-style-font-newsreader">
+    .font-newsreader {
+      font-family: 'Newsreader', serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-google-sans-flex" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-google-sans-flex">
+    .font-google-sans-flex {
+      font-family: 'Google Sans Flex', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-oswald" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-oswald">
+    .font-oswald {
+      font-family: 'Oswald', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-dm-sans" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-dm-sans">
+    .font-dm-sans {
+      font-family: 'DM Sans', sans-serif !important;
+    }
+  </style>
+  <link id="all-fonts-link-font-cormorant" rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&amp;display=swap">
+  <style id="all-fonts-style-font-cormorant">
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', serif !important;
+    }
+  </style>
+</head>
+
+<body class="antialiased selection:bg-red-600/30 selection:text-white overflow-x-hidden w-full min-h-screen relative">
+
+
+
+
+
+
+
+  <!-- Background (component) added by Aura -->
+  <div class="aura-background-component fixed top-0 w-full h-screen -z-10" data-alpha-mask="80"
+    style="; mask-image: linear-gradient(to bottom, transparent, black 0%, black 80%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)">
+    <div class="spline-container absolute top-0 left-0 w-full h-full z-0"><iframe
+        src="https://my.spline.design/glowingplanetparticles-HmCVKutonlFn3Oqqe6DI9nWi/" frameborder="0" width="100%"
+        height="100%" id="aura-spline"></iframe></div>
+  </div>
+  <!-- Unicorn Studio Background -->
+  <div class="fixed inset-0 w-full h-full -z-10 pointer-events-none brightness-110 saturate-125">
+    <div data-us-project="7WRlj4TRuUxuldc6GVDM" class="absolute inset-0 w-full h-full"></div>
+  </div>
+  <script>
+    // Unicorn Studio Script
+    !(function () {
+      if (!window.UnicornStudio) {
+        window.UnicornStudio = { isInitialized: !1 };
+        var i = document.createElement("script");
+        (i.src =
+          "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js"),
+          (i.onload = function () {
+            window.UnicornStudio.isInitialized ||
+              (UnicornStudio.init(),
+                (window.UnicornStudio.isInitialized = !0));
+          }),
+          (document.head || document.body).appendChild(i);
+      }
+    })();
+  </script>
+
+  <!-- Grid Overlay -->
+  <div class="absolute inset-0 z-10 w-full h-full pointer-events-none grid grid-cols-1 border-t border-white/10"></div>
+
+  <!-- HERO SECTION -->
+  <div class="relative z-20 w-full grid grid-cols-1 md:grid-cols-4 min-h-screen">
+    <!-- Hero Item 1 -->
+    <div
+      class="flex flex-col p-6 md:p-8 border-b md:border-b-0 border-r border-white/10 relative justify-between group">
+      <div class="absolute right-0 top-0 h-full w-[1px] bg-white/5 hidden md:block overflow-hidden">
+        <!-- Cinematic Red-Orange Beam -->
+        <div
+          class="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-transparent via-red-500 to-transparent animate-beam opacity-80 shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+        </div>
+      </div>
+      <div class="absolute -right-[5px] -top-[5px] text-white/30 text-[10px] hidden md:block z-20">
+        +
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-mono tracking-wider text-red-500">
+          /// 01
+        </span>
+        <span class="text-xs tracking-widest uppercase text-neutral-400 font-medium mt-2">
+          Design Experiment
+        </span>
+      </div>
+
+      <div class="mt-auto mb-8 max-w-xs">
+        <p class="text-sm text-neutral-300 leading-relaxed font-normal animate-in">
+          A motion-first design study exploring structure, rhythm, and digital
+          systems.
+        </p>
+      </div>
+    </div>
+
+    <!-- Hero Item 2 -->
+    <div class="hidden md:flex flex-col p-8 border-r border-white/10 relative justify-between">
+      <div class="absolute right-0 top-0 h-full w-[1px] bg-white/5 overflow-hidden">
+        <div
+          class="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-transparent via-red-500 to-transparent animate-beam opacity-80 shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+          style="animation-delay: 1.5s;"></div>
+      </div>
+      <div class="absolute -right-[5px] -top-[5px] text-white/30 text-[10px] z-20">
+        +
+      </div>
+    </div>
+
+    <!-- Hero Item 3 -->
+    <div class="hidden md:flex flex-col p-8 border-r border-white/10 relative justify-between">
+      <div class="absolute right-0 top-0 h-full w-[1px] bg-white/5 overflow-hidden">
+        <div
+          class="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-transparent via-red-500 to-transparent animate-beam opacity-80 shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+          style="animation-delay: 3s;"></div>
+      </div>
+      <div class="absolute -right-[5px] -top-[5px] text-white/30 text-[10px] z-20">
+        +
+      </div>
+    </div>
+
+    <!-- Hero Item 4 -->
+    <div class="flex flex-col md:p-8 pt-6 pr-6 pb-6 pl-6 relative justify-between">
+      <div class="flex justify-end md:justify-start">
+        <button
+          class="flex items-center gap-2 text-xs text-white font-medium hover:text-red-500 transition-colors uppercase tracking-widest border border-white/10 px-4 py-2 rounded-full bg-neutral-900/50 backdrop-blur-sm animate-in">
+          Menu
+          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="14" height="14"
+            viewBox="0 0 24 24" data-icon="lucide:menu" data-width="14" class="iconify iconify--lucide">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 5h16M4 12h16M4 19h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex justify-end md:justify-start mt-auto mb-8">
+        <div class="relative group cursor-pointer">
+          <!-- Cinematic Warm Border Spin -->
+          <div
+            class="absolute -inset-[1px] rounded-full bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_300deg,#ef4444_360deg)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-border-spin blur-[0.5px]">
+          </div>
+          <button
+            class="relative bg-neutral-950/80 backdrop-blur-md border border-white/10 text-neutral-300 px-6 py-3 rounded-full flex items-center gap-3 shadow-lg group-hover:text-white group-hover:border-transparent transition-all duration-300 animate-in">
+            <span class="text-xs font-medium tracking-widest uppercase">
+              Explore the System
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="14" height="14"
+              viewBox="0 0 24 24" data-icon="lucide:arrow-right" data-width="14"
+              class="iconify group-hover:translate-x-1 transition-transform iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 12h14m-7-7l7 7l-7 7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Big Center Title -->
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-10 pointer-events-none hidden md:block">
+      <h1
+        class="text-huge leading-[0.85] text-white tracking-tighter font-syne font-semibold opacity-90 mix-blend-plus-lighter animate-in">
+        ZENTR
+      </h1>
+    </div>
+  </div>
+
+  <!-- LOGO MARQUEE SECTION -->
+  <section class="z-20 overflow-hidden glass-section w-full border-t border-white/10 relative">
+    <!-- Grid Overlay -->
+    <div class="absolute inset-0 w-full h-full grid grid-cols-4 pointer-events-none z-10">
+      <div class="border-r border-white/10 h-full hidden md:block relative">
+        <div class="absolute -right-[5px] -top-[5px] text-white/30 text-[10px]">
+          +
+        </div>
+      </div>
+      <div class="border-r border-white/10 h-full hidden md:block relative">
+        <div class="absolute -right-[5px] -top-[5px] text-white/30 text-[10px]">
+          +
+        </div>
+      </div>
+      <div class="border-r border-white/10 h-full hidden md:block relative">
+        <div class="absolute -right-[5px] -top-[5px] text-white/30 text-[10px]">
+          +
+        </div>
+      </div>
+      <div class="hidden md:block"></div>
+    </div>
+
+    <div class="flex z-0 overflow-hidden py-12 relative items-center">
+      <div
+        class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none">
+      </div>
+      <div
+        class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none">
+      </div>
+
+      <div class="flex gap-20 animate-marquee-infinite whitespace-nowrap min-w-full">
+        <!-- Logo Items -->
+        <div class="flex items-center gap-20 shrink-0">
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:layers"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path
+                  d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z">
+                </path>
+                <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path>
+                <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path>
+              </g>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Layers
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:command"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"></path>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Command
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:box"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path
+                  d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z">
+                </path>
+                <path d="m3.3 7l8.7 5l8.7-5M12 22V12"></path>
+              </g>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Modules
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:zap"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">
+              </path>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Energy
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:hexagon"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16">
+              </path>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Vertex
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:activity"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2">
+              </path>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Pulse
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:globe"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20M2 12h20"></path>
+              </g>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Global
+            </span>
+          </div>
+        </div>
+        <div class="flex items-center gap-20 shrink-0">
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:layers"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path
+                  d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z">
+                </path>
+                <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path>
+                <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path>
+              </g>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Layers
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:command"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"></path>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Command
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:box"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path
+                  d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z">
+                </path>
+                <path d="m3.3 7l8.7 5l8.7-5M12 22V12"></path>
+              </g>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Modules
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:zap"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">
+              </path>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Energy
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:hexagon"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16">
+              </path>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Vertex
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:activity"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2">
+              </path>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Pulse
+            </span>
+          </div>
+          <div class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:globe"
+              class="iconify w-6 h-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20M2 12h20"></path>
+              </g>
+            </svg>
+            <span class="text-lg font-semibold font-syne tracking-tight">
+              Global
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AREAS OF EXPLORATION SECTION -->
+  <section class="z-20 glass-section w-full border-t border-white/10 relative">
+    <div class="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10">
+      <!-- Sidebar -->
+      <div class="md:col-span-1 flex flex-col min-h-[400px] h-full p-8 justify-between bg-white/[0.01]">
+        <div>
+          <span class="font-mono text-red-500 text-xs block mb-4">
+            /// AREAS OF EXPLORATION
+          </span>
+          <h2 class="text-3xl font-syne tracking-tight text-white mb-4 font-medium">
+            Areas ofExploration
+          </h2>
+          <p class="text-neutral-400 text-sm leading-relaxed mb-8">
+            Investigating the boundaries between static design and fluid
+            motion through systematic experimentation.
+          </p>
+        </div>
+        <button
+          class="w-max px-6 py-2 border border-white/10 rounded-full text-xs font-medium uppercase tracking-widest hover:bg-white hover:text-black transition-colors">
+          View Studies
+        </button>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 divide-y divide-x divide-white/10">
+        <!-- Branding -->
+        <div class="group flex flex-col hover:bg-white/[0.05] transition-colors duration-500 p-8 relative">
+          <div
+            class="aspect-video overflow-hidden flex flex-col group transition-all duration-500 bg-neutral-900/50 w-full border border-white/5 rounded mb-8 relative items-center justify-center">
+            <div
+              class="absolute inset-0 z-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(circle,black_50%,transparent_100%)]">
+            </div>
+            <!-- Isometric Cubes SVG preserved for illustration -->
+            <div class="z-10 transform transition-transform duration-700 group-hover:scale-110">
+              <svg viewBox="0 0 200 160" class="w-48 h-auto drop-shadow-2xl">
+                <g transform="translate(100, 100)">
+                  <path d="M0,-14 L24,0 L0,14 L-24,0 Z" fill="#e5e5e5" class="opacity-90"></path>
+                  <path d="M-24,0 L0,14 V40 L-24,26 Z" fill="#525252"></path>
+                  <path d="M0,14 L24,0 V26 L0,40 Z" fill="#262626"></path>
+                </g>
+                <g transform="translate(60, 80)" class="transition-transform duration-500 group-hover:-translate-x-2">
+                  <path d="M0,-14 L24,0 L0,14 L-24,0 Z" fill="#a3a3a3"></path>
+                  <path d="M-24,0 L0,14 V40 L-24,26 Z" fill="#404040"></path>
+                  <path d="M0,14 L24,0 V26 L0,40 Z" fill="#171717"></path>
+                </g>
+                <g transform="translate(140, 80)" class="transition-transform duration-500 group-hover:translate-x-2">
+                  <!-- Updated to Red-Orange Gradient tones -->
+                  <path d="M0,-14 L24,0 L0,14 L-24,0 Z" fill="#ef4444"></path>
+                  <path d="M-24,0 L0,14 V40 L-24,26 Z" fill="#b91c1c"></path>
+                  <path d="M0,14 L24,0 V26 L0,40 Z" fill="#991b1b"></path>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="flex flex-col flex-grow">
+            <span class="font-mono text-neutral-500 text-xs block mb-3">
+              01
+            </span>
+            <h3 class="text-xl text-white font-medium uppercase tracking-wide mb-3 font-syne">
+              Identity
+            </h3>
+            <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+              Visual systems that adapt and evolve.
+            </p>
+          </div>
+          <div class="mt-auto pt-6 border-t border-white/5">
+            <a href="#"
+              class="text-xs text-neutral-500 group-hover:text-white transition-colors flex items-center gap-2">
+              Explore Concept
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12"
+                viewBox="0 0 24 24" data-icon="lucide:arrow-right" data-width="12"
+                class="iconify group-hover:translate-x-1 transition-transform iconify--lucide">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 12h14m-7-7l7 7l-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Web Design -->
+        <div class="group flex flex-col hover:bg-white/[0.05] transition-colors duration-500 p-8 relative">
+          <div
+            class="aspect-video overflow-hidden flex flex-col group bg-neutral-900/50 w-full border border-white/5 rounded mb-8 relative items-center justify-center">
+            <div class="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent pointer-events-none"></div>
+            <!-- Minimal Browser Window SVG -->
+            <div
+              class="w-3/4 h-3/4 bg-neutral-950 border border-white/10 rounded-lg shadow-2xl flex flex-col overflow-hidden transform group-hover:-translate-y-2 transition-transform duration-500">
+              <div class="h-6 border-b border-white/5 bg-white/[0.02] flex items-center px-2 gap-1.5">
+                <div class="w-2 h-2 rounded-full bg-red-500/50"></div>
+                <div class="w-2 h-2 rounded-full bg-white/20"></div>
+                <div class="w-2 h-2 rounded-full bg-white/20"></div>
+              </div>
+              <div class="flex-1 p-3 flex gap-3">
+                <div class="w-1/4 h-full bg-white/[0.03] rounded animate-pulse"></div>
+                <div class="flex-1 h-full flex flex-col gap-2">
+                  <div class="w-full h-16 bg-white/[0.03] rounded"></div>
+                  <div class="flex gap-2 h-full">
+                    <div class="flex-1 bg-white/[0.03] rounded"></div>
+                    <div class="flex-1 bg-white/[0.03] rounded"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col flex-grow">
+            <span class="font-mono text-neutral-500 text-xs block mb-3">
+              02
+            </span>
+            <h3 class="text-xl text-white font-medium uppercase tracking-wide mb-3 font-syne">
+              Interface
+            </h3>
+            <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+              Crafting immersive digital environments.
+            </p>
+          </div>
+          <div class="mt-auto pt-6 border-t border-white/5">
+            <a href="#"
+              class="text-xs text-neutral-500 group-hover:text-white transition-colors flex items-center gap-2">
+              View Interaction
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12"
+                viewBox="0 0 24 24" data-icon="lucide:arrow-right" data-width="12"
+                class="iconify group-hover:translate-x-1 transition-transform iconify--lucide">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 12h14m-7-7l7 7l-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Product -->
+        <div class="group flex flex-col hover:bg-white/[0.05] transition-colors duration-500 p-8 relative">
+          <div
+            class="aspect-video overflow-hidden flex flex-col group bg-neutral-900/50 w-full border border-white/5 rounded mb-8 relative items-center justify-center">
+            <!-- Code Block Visual -->
+            <div
+              class="w-5/6 bg-[#09090b] rounded-lg border border-white/10 p-4 font-mono text-[10px] shadow-2xl relative">
+              <div class="absolute -top-3 -right-3 w-8 h-8 bg-red-500/10 rounded-full blur-xl"></div>
+              <div class="flex flex-col gap-1.5 text-neutral-400">
+                <div>
+                  <span class="text-red-500">const</span>
+                  <span class="text-white">init</span>
+                  =
+                  <span class="text-red-500">()</span>
+                  =&gt; {
+                </div>
+                <div class="pl-4">
+                  <span class="text-neutral-500">// Initialize core</span>
+                </div>
+                <div class="pl-4">
+                  <span class="text-orange-400">System</span>
+                  .
+                  <span class="text-yellow-400">boot</span>
+                  ({
+                </div>
+                <div class="pl-8">
+                  mode:
+                  <span class="text-green-400">'secure'</span>
+                  ,
+                </div>
+                <div class="pl-8">
+                  sync:
+                  <span class="text-red-500">true</span>
+                </div>
+                <div class="pl-4">});</div>
+                <div>}</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col flex-grow">
+            <span class="font-mono text-neutral-500 text-xs block mb-3">
+              03
+            </span>
+            <h3 class="text-xl text-white font-medium uppercase tracking-wide mb-3 font-syne">
+              System
+            </h3>
+            <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+              Functional logic for complex structures.
+            </p>
+          </div>
+          <div class="mt-auto pt-6 border-t border-white/5">
+            <a href="#"
+              class="text-xs text-neutral-500 group-hover:text-white transition-colors flex items-center gap-2">
+              Analyze Code
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12"
+                viewBox="0 0 24 24" data-icon="lucide:arrow-right" data-width="12"
+                class="iconify group-hover:translate-x-1 transition-transform iconify--lucide">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 12h14m-7-7l7 7l-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Strategy -->
+        <div class="group flex flex-col hover:bg-white/[0.05] transition-colors duration-500 p-8 relative">
+          <div
+            class="aspect-video overflow-hidden flex flex-col group bg-neutral-900/50 w-full border border-white/5 rounded mb-8 relative items-center justify-center">
+            <!-- Chart Visual -->
+            <div class="w-3/4 h-1/2 flex items-end justify-between gap-2 px-4 border-b border-white/10 pb-px">
+              <div class="w-full bg-neutral-800 h-[30%] rounded-t-sm group-hover:h-[40%] transition-all duration-700">
+              </div>
+              <div
+                class="w-full bg-neutral-700 h-[50%] rounded-t-sm group-hover:h-[70%] transition-all duration-700 delay-75">
+              </div>
+              <div
+                class="w-full bg-red-900/50 h-[40%] rounded-t-sm group-hover:h-[50%] transition-all duration-700 delay-100">
+              </div>
+              <div
+                class="w-full bg-red-600 h-[75%] rounded-t-sm group-hover:h-[85%] transition-all duration-700 delay-150 shadow-[0_0_15px_rgba(220,38,38,0.4)]">
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col flex-grow">
+            <span class="font-mono text-neutral-500 text-xs block mb-3">
+              04
+            </span>
+            <h3 class="text-xl text-white font-medium uppercase tracking-wide mb-3 font-syne">
+              Analysis
+            </h3>
+            <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+              Data-driven insights to navigate the future.
+            </p>
+          </div>
+          <div class="mt-auto pt-6 border-t border-white/5">
+            <a href="#"
+              class="text-xs text-neutral-500 group-hover:text-white transition-colors flex items-center gap-2">
+              Read Methodology
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12"
+                viewBox="0 0 24 24" data-icon="lucide:arrow-right" data-width="12"
+                class="iconify group-hover:translate-x-1 transition-transform iconify--lucide">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 12h14m-7-7l7 7l-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEXT BANNER SECTION -->
+  <section class="relative z-20 w-full border-t border-white/10 glass-section overflow-hidden">
+    <div class="absolute inset-0 w-full h-full grid grid-cols-1 md:grid-cols-4 pointer-events-none">
+      <div class="border-r border-white/10 h-full hidden md:block relative">
+        <div class="absolute -right-[5px] -top-[5px] text-white/30 text-[10px]">
+          +
+        </div>
+      </div>
+      <div class="border-r border-white/10 h-full hidden md:block relative">
+        <div class="absolute -right-[5px] -top-[5px] text-white/30 text-[10px]">
+          +
+        </div>
+      </div>
+      <div class="border-r border-white/10 h-full hidden md:block relative">
+        <div class="absolute -right-[5px] -top-[5px] text-white/30 text-[10px]">
+          +
+        </div>
+      </div>
+      <div class="hidden md:block"></div>
+    </div>
+    <div class="relative z-10 grid grid-cols-1 md:grid-cols-4 w-full">
+      <div class="hidden md:block"></div>
+      <div class="md:col-span-3 flex items-center py-24 md:py-32 px-8">
+        <h2
+          class="text-5xl md:text-7xl lg:text-9xl font-syne tracking-tighter text-white leading-none font-medium drop-shadow-lg">
+          +10 years in
+
+          the game.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- ELEVATED FEATURES SECTION -->
+  <section class="relative z-20 w-full border-t border-white/10 glass-section">
+    <div class="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10">
+      <div class="p-8 md:col-span-1 flex flex-col justify-between h-full min-h-[400px] bg-white/[0.01]">
+        <div>
+          <span class="font-mono text-red-500 text-xs block mb-4">
+            /// FEATURES
+          </span>
+          <h2 class="text-3xl font-syne tracking-tight text-white mb-4 font-medium">
+            Core Principles
+          </h2>
+          <p class="text-neutral-400 text-sm leading-relaxed mb-8">
+            Crafted with precision to enhance digital presence through
+            cutting-edge technology.
+          </p>
+        </div>
+        <button
+          class="w-max px-6 py-2 border border-white/10 rounded-full text-xs font-medium uppercase tracking-widest hover:bg-white hover:text-black transition-colors reveal-hidden">
+          Explore Principles
+        </button>
+      </div>
+
+      <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
+        <!-- Feature 1 -->
+        <div class="group p-8 flex flex-col justify-between hover:bg-white/[0.05] transition-colors">
+          <div>
+            <div
+              class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mb-4 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="20" height="20"
+                viewBox="0 0 24 24" data-icon="lucide:zap" data-width="20" class="iconify iconify--lucide">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">
+                </path>
+              </svg>
+            </div>
+            <h3 class="text-white font-medium mb-2 font-syne">
+              Velocity
+            </h3>
+            <p class="text-neutral-500 text-sm">
+              Optimized for speed and efficiency.
+            </p>
+          </div>
+          <div class="relative h-24 w-full flex items-end gap-1.5 mt-8">
+            <div
+              class="w-full bg-red-900/20 rounded-t-[2px] h-[40%] group-hover:bg-red-500/80 transition-all duration-500">
+            </div>
+            <div
+              class="w-full bg-red-900/20 rounded-t-[2px] h-[60%] group-hover:bg-red-500/80 transition-all duration-500 delay-75">
+            </div>
+            <div
+              class="w-full bg-red-900/20 rounded-t-[2px] h-[80%] group-hover:bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)] transition-all duration-500 delay-100">
+            </div>
+            <div
+              class="w-full bg-red-900/20 rounded-t-[2px] h-[50%] group-hover:bg-red-500/80 transition-all duration-500 delay-150">
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="group p-8 flex flex-col justify-between hover:bg-white/[0.05] transition-colors">
+          <div>
+            <div
+              class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mb-4 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="20" height="20"
+                viewBox="0 0 24 24" data-icon="lucide:shield-check" data-width="20" class="iconify iconify--lucide">
+                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                  <path
+                    d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                  </path>
+                  <path d="m9 12l2 2l4-4"></path>
+                </g>
+              </svg>
+            </div>
+            <h3 class="text-white font-medium mb-2 font-syne">Foundation</h3>
+            <p class="text-neutral-500 text-sm">
+              Built with stability as a priority.
+            </p>
+          </div>
+          <div class="relative w-full h-24 mt-8 flex items-center justify-center">
+            <div
+              class="w-16 h-16 rounded-full border border-dashed border-neutral-700 animate-[spin_10s_linear_infinite] group-hover:border-red-500 transition-colors">
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="24" height="24"
+              viewBox="0 0 24 24" data-icon="lucide:lock" data-width="24"
+              class="iconify absolute text-neutral-600 group-hover:text-red-500 transition-colors iconify--lucide">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="group p-8 flex flex-col justify-between hover:bg-white/[0.05] transition-colors">
+          <div>
+            <div
+              class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mb-4 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="20" height="20"
+                viewBox="0 0 24 24" data-icon="lucide:scale" data-width="20" class="iconify iconify--lucide">
+                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                  <path d="M12 3v18m7-13l3 8a5 5 0 0 1-6 0zV7"></path>
+                  <path d="M3 7h1a17 17 0 0 0 8-2a17 17 0 0 0 8 2h1M5 8l3 8a5 5 0 0 1-6 0zV7m2 14h10"></path>
+                </g>
+              </svg>
+            </div>
+            <h3 class="text-white font-medium mb-2 font-syne">
+              Scalability
+            </h3>
+            <p class="text-neutral-500 text-sm">
+              Grows with system requirements.
+            </p>
+          </div>
+          <div
+            class="relative w-full h-24 mt-8 bg-neutral-900/50 border border-white/5 rounded overflow-hidden flex items-end">
+            <svg class="w-full h-full text-red-500/20" preserveAspectRatio="none" viewBox="0 0 100 50">
+              <path d="M0,50 L20,40 L40,45 L60,20 L80,25 L100,5" fill="none" stroke="currentColor" stroke-width="2"
+                class="group-hover:text-red-500 transition-colors duration-500"></path>
+              <path d="M0,50 L20,40 L40,45 L60,20 L80,25 L100,5 V50 H0 Z" fill="currentColor"
+                class="opacity-20 group-hover:opacity-40 transition-opacity"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS SECTION -->
+  <section class="relative z-20 w-full border-t border-white/10 glass-section">
+    <div class="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10">
+      <div class="p-8 md:col-span-1 flex flex-col justify-between h-full min-h-[400px] bg-white/[0.01]">
+        <div>
+          <span class="font-mono text-red-500 text-xs block mb-4">
+            /// OBSERVATIONS
+          </span>
+          <h2 class="text-3xl font-syne tracking-tight text-white mb-4 font-medium reveal-hidden">
+            Voices
+          </h2>
+          <p class="text-neutral-400 text-sm leading-relaxed mb-8 reveal-hidden">
+            Perspectives from those who have interacted with the system.
+          </p>
+        </div>
+        <button
+          class="w-max px-6 py-2 border border-white/10 rounded-full text-xs font-medium uppercase tracking-widest hover:bg-white hover:text-black transition-colors reveal-hidden">
+          Read Observations
+        </button>
+      </div>
+
+      <div class="md:col-span-3 relative overflow-hidden flex items-center bg-transparent">
+        <div
+          class="absolute left-0 top-0 bottom-0 w-32 z-20 bg-gradient-to-r from-[#0a0a0a] to-transparent pointer-events-none">
+        </div>
+        <div
+          class="absolute right-0 top-0 bottom-0 w-32 z-20 bg-gradient-to-l from-[#0a0a0a] to-transparent pointer-events-none">
+        </div>
+
+        <div class="flex gap-6 py-16 animate-marquee-infinite w-max pl-8">
+          <!-- Card 1 -->
+          <div
+            class="glass-card w-[450px] p-8 rounded-2xl flex flex-col justify-between shrink-0 hover:border-white/20 transition-all duration-300 group cursor-default">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:quote"
+              class="iconify w-8 h-8 text-neutral-500 mb-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2zM5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+              </path>
+            </svg>
+            <blockquote class="text-xl text-neutral-200 font-light leading-snug mb-8 font-syne">
+              "The attention to detail and creative direction provided completely redefined our brand identity."
+            </blockquote>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center font-mono text-xs text-white">
+                AM
+              </div>
+              <div>
+                <div class="text-white text-sm font-medium">Alex Morgan</div>
+                <div class="text-neutral-500 text-xs">CEO, Apex Dynamics</div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div
+            class="glass-card w-[450px] p-8 rounded-2xl flex flex-col justify-between shrink-0 hover:border-white/20 transition-all duration-300 group cursor-default">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:quote"
+              class="iconify w-8 h-8 text-neutral-500 mb-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2zM5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+              </path>
+            </svg>
+            <blockquote class="text-xl text-neutral-200 font-light leading-snug mb-8 font-syne">
+              "A masterclass in design systems. The scalability and
+              performance have exceeded our wildest expectations."
+            </blockquote>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center font-mono text-xs text-white">
+                SC
+              </div>
+              <div>
+                <div class="text-white text-sm font-medium">Sarah Chen</div>
+                <div class="text-neutral-500 text-xs">CTO, Nexus Corp</div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div
+            class="glass-card w-[450px] p-8 rounded-2xl flex flex-col justify-between shrink-0 hover:border-white/20 transition-all duration-300 group cursor-default">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:quote"
+              class="iconify w-8 h-8 text-neutral-500 mb-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2zM5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+              </path>
+            </svg>
+            <blockquote class="text-xl text-neutral-200 font-light leading-snug mb-8 font-syne">
+              "Transformation was instant. We saw metrics improve overnight
+              thanks to the new user experience strategy."
+            </blockquote>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center font-mono text-xs text-white">
+                MT
+              </div>
+              <div>
+                <div class="text-white text-sm font-medium">
+                  Marcus Thorne
+                </div>
+                <div class="text-neutral-500 text-xs">
+                  Director, Horizon Ventures
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 1 Duplicate -->
+          <div
+            class="glass-card w-[450px] p-8 rounded-2xl flex flex-col justify-between shrink-0 hover:border-white/20 transition-all duration-300 group cursor-default">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+              viewBox="0 0 24 24" data-icon="lucide:quote"
+              class="iconify w-8 h-8 text-neutral-500 mb-6 group-hover:text-red-500 transition-colors iconify--lucide">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2zM5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+              </path>
+            </svg>
+            <blockquote class="text-xl text-neutral-200 font-light leading-snug mb-8 font-syne">
+              "The attention to detail and creative direction provided completely redefined our brand identity."
+            </blockquote>
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center font-mono text-xs text-white">
+                AM
+              </div>
+              <div>
+                <div class="text-white text-sm font-medium">Alex Morgan</div>
+                <div class="text-neutral-500 text-xs">CEO, Apex Dynamics</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="relative z-20 w-full border-t border-white/10 glass-section">
+    <div class="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10">
+      <div class="p-8 md:col-span-1 flex flex-col justify-between h-full min-h-[300px] bg-white/[0.01]">
+        <div>
+          <span class="font-mono text-red-500 text-xs block mb-4">
+            /// CONNECT
+          </span>
+          <h2 class="text-3xl font-syne tracking-tight text-white mb-4 font-medium reveal-hidden">
+            Connect
+          </h2>
+          <p class="text-neutral-400 text-sm leading-relaxed mb-8 reveal-hidden">
+            Ready to explore? Let's build something
+            extraordinary together.
+          </p>
+        </div>
+        <button
+          class="w-max px-6 py-3 bg-red-600 text-white rounded-full text-xs font-medium uppercase tracking-widest hover:bg-red-700 transition-colors reveal-hidden shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+          Start Dialogue
+        </button>
+      </div>
+
+      <div class="p-8 md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+          <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-6">
+            Sitemap
+          </h4>
+          <ul class="space-y-3">
+            <li>
+              <a href="#" class="text-neutral-500 text-sm hover:text-white transition-colors">
+                Experiment
+              </a>
+            </li>
+            <li>
+              <a href="#" class="text-neutral-500 text-sm hover:text-white transition-colors">
+                Studies
+              </a>
+            </li>
+            <li>
+              <a href="#" class="text-neutral-500 text-sm hover:text-white transition-colors">
+                Journal
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-6">
+            Socials
+          </h4>
+          <ul class="space-y-3">
+            <li>
+              <a href="#" class="text-neutral-500 text-sm hover:text-white transition-colors">
+                Instagram
+              </a>
+            </li>
+            <li>
+              <a href="#" class="text-neutral-500 text-sm hover:text-white transition-colors">
+                Twitter
+              </a>
+            </li>
+            <li>
+              <a href="#" class="text-neutral-500 text-sm hover:text-white transition-colors">
+                LinkedIn
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-span-2 md:col-span-2">
+          <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-6">
+            Newsletter
+          </h4>
+          <form class="flex flex-col gap-4">
+            <input type="email" placeholder="Enter your email"
+              class="w-full bg-transparent border-b border-white/20 py-2 text-white text-sm focus:outline-none focus:border-red-500 transition-colors placeholder:text-neutral-700">
+            <button
+              class="self-start text-xs text-neutral-400 uppercase tracking-widest hover:text-white transition-colors reveal-hidden flex items-center gap-2">
+              Subscribe
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12"
+                viewBox="0 0 24 24" data-icon="lucide:arrow-right" data-width="12" class="iconify iconify--lucide">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 12h14m-7-7l7 7l-7 7"></path>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/10 mt-0">
+      <div class="px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <span class="text-neutral-600 text-[10px] uppercase tracking-wider">
+          © 2025 — ZENTR, Design Experiment
+        </span>
+        <span class="text-neutral-600 text-[10px] uppercase tracking-wider">
+          Designed with precision.
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Intersection Observer for Reveal Animation -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.remove("reveal-hidden");
+              entry.target.classList.add("animate-in");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+
+      const targets = document.querySelectorAll(
+        "h1, h2, h3, p, button, .reveal-hidden"
+      );
+      targets.forEach((el) => {
+        if (!el.closest(".animate-marquee-infinite")) {
+          el.classList.add("reveal-hidden");
+          observer.observe(el);
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>
