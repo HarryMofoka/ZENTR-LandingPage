@@ -301,41 +301,30 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * 8. LIGHTWEIGHT BACKGROUND ANIMATIONS
+ * 8. SHOOTING STAR ANIMATION
  *
- * These keyframes power the CSS-only planet glow and ambient colour shift
- * that replaced the heavy Spline iframe and Unicorn Studio WebGL layers.
+ * CSS keyframe for diagonal shooting stars. The star fades in, streaks
+ * across ~600px diagonally, and fades out. The translateX handles the
+ * horizontal movement; the rotation is set inline via `transform: rotate()`.
  * ───────────────────────────────────────────────────────────────────────────── */
+@keyframes shoot {
+  0% {
+    transform-origin: right;
+    opacity: 0;
+    transform: translateX(0) rotate(inherit) scaleX(0);
+  }
 
-/*
- * pulse-glow — Gentle breathing effect for the planet core.
- * Alternates between slightly smaller/larger scale to create
- * a "living" glow without any JS overhead.
- */
-@keyframes pulse-glow {
+  5% {
+    opacity: 1;
+    transform: translateX(-40px) scaleX(1);
+  }
 
-  0%,
-  100% {
-    transform: translate(-50%, -50%) scale(1);
+  70% {
     opacity: 0.6;
   }
 
-  50% {
-    transform: translate(-50%, -50%) scale(1.08);
-    opacity: 0.45;
-  }
-}
-
-/*
- * colour-drift — Slow positional shift of the ambient overlay.
- * Creates a subtle, organic colour movement across the viewport.
- */
-@keyframes colour-drift {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-
   100% {
-    transform: translate(30px, -20px) scale(1.05);
+    opacity: 0;
+    transform: translateX(-600px) scaleX(0.5);
   }
 }

@@ -1,102 +1,78 @@
 /**
  * @file Background.jsx
- * @description Lightweight animated background — replaces the heavy Spline
- * iframe and Unicorn Studio WebGL layers.
+ * @description Lightweight animated background with shooting stars and
+ * orbiting particle field.
  *
  * ARCHITECTURE
  * ────────────
- * The background is now composed of pure CSS + Canvas:
+ * Three visual layers, all lightweight:
  *
- * 1. **Radial gradient "planet"** — A CSS radial-gradient that creates a
- *    glowing orb effect in the centre of the viewport. The glow pulses
- *    softly using a CSS animation.
+ * 1. **Shooting stars** — CSS-animated streaks that appear at random
+ *    positions and angles, flying across the viewport. Each star has
+ *    randomised delay, duration, and starting position for variety.
  *
- * 2. **Canvas particle field** — A lightweight Canvas 2D particle system
- *    that renders ~80 floating particles orbiting around the centre.
- *    Each particle has randomised size, speed, opacity, and orbit radius.
+ * 2. **Canvas particle field** — ~80 small dots drifting across the
+ *    entire viewport (not just the centre), creating a starfield.
  *
- * 3. **Ambient colour wash** — A subtle animated gradient overlay that
- *    shifts hue over time, replacing the Unicorn Studio atmospheric effect.
- *
- * WHY replace Spline + Unicorn Studio?
- * ────────────────────────────────────
- * The Spline iframe ran a full WebGL particle simulation (~200-400MB GPU)
- * that we couldn't throttle from outside the iframe. Unicorn Studio added
- * a second WebGL context on top, doubling GPU work. Together they caused
- * significant lag on mid-range devices.
- *
- * This replacement achieves a visually similar effect at ~1% of the GPU
- * cost by using:
- * - CSS gradients (composited by the browser, near-zero cost)
- * - Canvas 2D (single lightweight context, ~80 particles at 60fps)
- * - CSS animations for the pulsing glow (GPU-accelerated via transform)
- *
- * PERFORMANCE COMPARISON
- * ─────────────────────
- * | Metric              | Before (Spline + Unicorn) | After (CSS + Canvas) |
- * |─────────────────────|──────────────────────────|─────────────────────|
- * | GPU Memory          | ~300-400MB               | ~5-10MB             |
- * | WebGL Contexts      | 2                        | 0                   |
- * | Network Requests    | 2 (iframe + CDN script)  | 0                   |
- * | First Paint Impact  | Blocks (iframe load)     | None (inline)       |
+ * 3. **Very subtle centre glow** — A faint red radial gradient at the
+ *    centre, barely visible, just enough to warm the colour palette.
  *
  * @returns {JSX.Element} The lightweight animated background.
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-/**
- * Particle configuration.
- *
- * WHY 80 particles?
- * Enough to create a dense, lively field without stressing Canvas 2D.
- * Each particle is a simple arc() call — 80 of these per frame is trivial
- * for any modern device, including mobile.
- */
 const PARTICLE_COUNT = 80;
+const SHOOTING_STAR_COUNT = 6;
 
 /**
- * Creates a single particle with randomised properties.
- * Particles orbit the centre point at varying distances and speeds.
- *
- * @param {number} canvasW - Canvas width
- * @param {number} canvasH - Canvas height
- * @returns {Object} Particle with position, orbit, speed, size, opacity
+ * Create a particle that drifts across the full viewport.
+ * Unlike the previous version, particles are NOT locked to orbits —
+ * they float freely for a starfield effect.
  */
-function createParticle(canvasW, canvasH) {
-    const angle = Math.random() * Math.PI * 2;
-    const orbitRadius = 80 + Math.random() * Math.min(canvasW, canvasH) * 0.4;
+function createParticle(w, h) {
     return {
-        angle,
-        orbitRadius,
-        /* Speed — smaller orbits move faster (Kepler-like) for realism */
-        speed: (0.0002 + Math.random() * 0.0008) * (200 / orbitRadius),
-        /* Subtle wobble on the orbit radius for organic movement */
-        wobbleSpeed: 0.001 + Math.random() * 0.002,
-        wobbleAmount: 5 + Math.random() * 15,
-        size: 0.5 + Math.random() * 2,
-        opacity: 0.2 + Math.random() * 0.5,
-        /* Some particles get a red tint to match the brand */
-        isRed: Math.random() < 0.15,
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.15,
+        size: 0.4 + Math.random() * 1.5,
+        opacity: 0.15 + Math.random() * 0.45,
+        isRed: Math.random() < 0.12,
+        /* Twinkle — particles fade in and out */
+        twinkleSpeed: 0.005 + Math.random() * 0.01,
+        twinklePhase: Math.random() * Math.PI * 2,
     };
+}
+
+/**
+ * Generate random shooting star CSS properties.
+ * Each star gets a unique start position, angle, delay, and duration.
+ */
+function generateShootingStars() {
+    return Array.from({ length: SHOOTING_STAR_COUNT }, (_, i) => ({
+        id: i,
+        top: `${5 + Math.random() * 60}%`,
+        left: `${Math.random() * 80}%`,
+        angle: 20 + Math.random() * 30,       // degrees — diagonal
+        delay: `${Math.random() * 12}s`,       // staggered over 12s
+        duration: `${1.5 + Math.random() * 2}s`, // 1.5–3.5s per streak
+        length: `${80 + Math.random() * 120}px`, // streak trail length
+    }));
 }
 
 export default function Background() {
     const canvasRef = useRef(null);
     const particlesRef = useRef([]);
     const animFrameRef = useRef(null);
+    const [stars] = useState(generateShootingStars);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
         let width, height;
 
-        /**
-         * Resize handler — matches canvas to viewport.
-         * Using devicePixelRatio ensures sharp rendering on Retina displays.
-         */
         const resize = () => {
             const dpr = window.devicePixelRatio || 1;
             width = window.innerWidth;
@@ -106,8 +82,6 @@ export default function Background() {
             canvas.style.width = `${width}px`;
             canvas.style.height = `${height}px`;
             ctx.scale(dpr, dpr);
-
-            /* Reinitialise particles on resize so orbits fit the new viewport */
             particlesRef.current = Array.from(
                 { length: PARTICLE_COUNT },
                 () => createParticle(width, height)
@@ -117,63 +91,48 @@ export default function Background() {
         resize();
         window.addEventListener('resize', resize);
 
-        /**
-         * Animation loop — runs at 60fps via requestAnimationFrame.
-         *
-         * For each frame:
-         * 1. Clear the canvas
-         * 2. Update each particle's orbital angle
-         * 3. Calculate screen position from polar coordinates
-         * 4. Draw the particle as a filled circle with optional glow
-         */
         let time = 0;
         const animate = () => {
             time += 1;
             ctx.clearRect(0, 0, width, height);
 
-            const cx = width / 2;
-            const cy = height / 2;
-
             particlesRef.current.forEach((p) => {
-                /* Advance the orbital angle */
-                p.angle += p.speed;
+                /* Drift */
+                p.x += p.vx;
+                p.y += p.vy;
 
-                /* Apply wobble to orbit radius for organic motion */
-                const wobble = Math.sin(time * p.wobbleSpeed) * p.wobbleAmount;
-                const r = p.orbitRadius + wobble;
+                /* Wrap around viewport edges */
+                if (p.x < -10) p.x = width + 10;
+                if (p.x > width + 10) p.x = -10;
+                if (p.y < -10) p.y = height + 10;
+                if (p.y > height + 10) p.y = -10;
 
-                /* Convert polar → screen coordinates */
-                const x = cx + Math.cos(p.angle) * r;
-                const y = cy + Math.sin(p.angle) * r * 0.6; /* 0.6 = elliptical squash for perspective */
+                /* Twinkle — sinusoidal opacity modulation */
+                const twinkle = 0.5 + 0.5 * Math.sin(time * p.twinkleSpeed + p.twinklePhase);
+                const alpha = p.opacity * twinkle;
 
-                /* Draw particle */
                 ctx.beginPath();
-                ctx.arc(x, y, p.size, 0, Math.PI * 2);
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
 
                 if (p.isRed) {
-                    ctx.fillStyle = `rgba(239, 68, 68, ${p.opacity})`;
-                    /* Add subtle glow for red particles */
-                    ctx.shadowColor = 'rgba(239, 68, 68, 0.3)';
-                    ctx.shadowBlur = 8;
+                    ctx.fillStyle = `rgba(239, 68, 68, ${alpha})`;
+                    ctx.shadowColor = 'rgba(239, 68, 68, 0.25)';
+                    ctx.shadowBlur = 6;
                 } else {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity * 0.6})`;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.5})`;
                     ctx.shadowColor = 'transparent';
                     ctx.shadowBlur = 0;
                 }
-
                 ctx.fill();
             });
 
-            /* Reset shadow for next frame */
             ctx.shadowColor = 'transparent';
             ctx.shadowBlur = 0;
-
             animFrameRef.current = requestAnimationFrame(animate);
         };
 
         animate();
 
-        /* Cleanup — prevent memory leaks on unmount */
         return () => {
             cancelAnimationFrame(animFrameRef.current);
             window.removeEventListener('resize', resize);
@@ -181,70 +140,52 @@ export default function Background() {
     }, []);
 
     return (
-        <>
-            {/* ── LAYER 1: Glowing Planet (pure CSS) ────────────────────────
-       *
-       * Multiple layered radial gradients create the "planet" effect:
-       * 1. Inner core — bright red/orange glow
-       * 2. Mid ring — diffused warm glow
-       * 3. Outer halo — very subtle atmospheric scatter
-       *
-       * The `animate-pulse` class adds a gentle breathing effect.
-       * `mix-blend-mode: screen` ensures the glow adds light rather
-       * than obscuring content behind it.
-       *
-       * WHY fixed positioning?
-       * The background stays in place as the user scrolls, creating
-       * parallax depth with the foreground content.
-       * ──────────────────────────────────────────────────────────── */}
-            <div className="fixed inset-0 -z-10 overflow-hidden">
-                {/* Planet core glow */}
-                <div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full opacity-60"
-                    style={{
-                        background: 'radial-gradient(circle, rgba(239,68,68,0.15) 0%, rgba(239,68,68,0.05) 30%, rgba(120,40,40,0.02) 60%, transparent 70%)',
-                        animation: 'pulse-glow 8s ease-in-out infinite',
-                    }}
-                />
-
-                {/* Secondary warm halo */}
-                <div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] md:w-[1200px] md:h-[1200px] rounded-full opacity-30"
-                    style={{
-                        background: 'radial-gradient(circle, rgba(200,80,60,0.08) 0%, rgba(100,30,30,0.03) 40%, transparent 60%)',
-                        animation: 'pulse-glow 12s ease-in-out infinite reverse',
-                    }}
-                />
-
-                {/* Ambient colour shift overlay */}
-                <div
-                    className="absolute inset-0 opacity-20"
-                    style={{
-                        background: 'radial-gradient(ellipse at 30% 40%, rgba(239,68,68,0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 60%, rgba(120,60,200,0.04) 0%, transparent 50%)',
-                        animation: 'colour-drift 20s ease-in-out infinite alternate',
-                    }}
-                />
-
-                {/* ── LAYER 2: Canvas Particle Field ─────────────────────────
-         *
-         * Renders ~80 particles orbiting the centre in elliptical paths.
-         * Uses Canvas 2D (not WebGL) for maximum compatibility and
-         * minimal GPU overhead.
-         * ──────────────────────────────────────────────────────────── */}
-                <canvas
-                    ref={canvasRef}
-                    className="absolute inset-0 w-full h-full"
-                    style={{ mixBlendMode: 'screen' }}
-                />
-            </div>
-
-            {/* ── Mask: soft bottom fade ─────────────────────────────────── */}
+        <div className="fixed inset-0 -z-10 overflow-hidden">
+            {/* ── Very subtle centre warmth (barely visible) ──────────── */}
             <div
-                className="fixed inset-0 -z-10 pointer-events-none"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20 pointer-events-none"
                 style={{
-                    background: 'linear-gradient(to bottom, transparent 0%, transparent 70%, #050505 100%)',
+                    background: 'radial-gradient(circle, rgba(239,68,68,0.08) 0%, transparent 60%)',
                 }}
             />
-        </>
+
+            {/* ── Canvas starfield (fills entire viewport) ───────────── */}
+            <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full"
+            />
+
+            {/* ── Shooting Stars (pure CSS) ──────────────────────────────
+       *
+       * Each star is a small element that flies diagonally across
+       * the viewport with a glowing trail. The trail is achieved
+       * with a linear-gradient background that fades from white
+       * to transparent.
+       *
+       * WHY CSS instead of Canvas?
+       * Shooting stars are infrequent, fast-moving elements that
+       * benefit from GPU-accelerated transforms. CSS animations
+       * run on the compositor thread, so they don't compete with
+       * the Canvas particle loop on the main thread.
+       * ──────────────────────────────────────────────────────── */}
+            {stars.map((star) => (
+                <div
+                    key={star.id}
+                    className="absolute pointer-events-none"
+                    style={{
+                        top: star.top,
+                        left: star.left,
+                        width: star.length,
+                        height: '1px',
+                        transform: `rotate(${star.angle}deg)`,
+                        background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(239,68,68,0.8) 100%)',
+                        borderRadius: '999px',
+                        boxShadow: '0 0 6px rgba(255,255,255,0.3), 0 0 12px rgba(239,68,68,0.2)',
+                        animation: `shoot ${star.duration} ${star.delay} linear infinite`,
+                        opacity: 0,
+                    }}
+                />
+            ))}
+        </div>
     );
 }
