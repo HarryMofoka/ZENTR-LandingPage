@@ -55,7 +55,7 @@ export default function AreasOfExploration() {
                 />
 
                 {/* ── Cards Grid ─────────────────────────────────────────────── */}
-                <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 divide-y divide-x divide-white/10">
+                <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 divide-y md:divide-x divide-white/10">
                     {/* ── Card 1: Identity ──────────────────────────────────────
            *
            * Isometric cubes SVG — three cubes arranged in a triangular

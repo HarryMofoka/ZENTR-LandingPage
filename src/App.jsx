@@ -53,6 +53,7 @@ import useRevealAnimation from './hooks/useRevealAnimation';
 /* ─── Above-the-fold Components (eagerly loaded) ─────────────────────────── */
 import Background from './components/Background';
 import GridOverlay from './components/GridOverlay';
+import Navbar from './components/Navbar';
 import Hero from './components/Hero/Hero';
 import LogoMarquee from './components/LogoMarquee/LogoMarquee';
 
@@ -91,6 +92,9 @@ export default function App() {
       ref={appRef}
       className="antialiased selection:bg-red-600/30 selection:text-white overflow-x-hidden w-full min-h-screen relative"
     >
+      {/* ── Fixed Navbar (always on top) ────────────────────────────── */}
+      <Navbar />
+
       {/* ── Background Layers (fixed, behind content) ──────────────── */}
       <Background />
 

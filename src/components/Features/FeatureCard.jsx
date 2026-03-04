@@ -32,7 +32,7 @@
 
 export default function FeatureCard({ icon, title, description, children }) {
     return (
-        <div className="group p-8 flex flex-col justify-between hover:bg-white/[0.05] transition-colors">
+        <div className="group p-6 md:p-8 flex flex-col justify-between hover:bg-white/[0.05] transition-colors">
             <div>
                 {/* ── Icon Container ─────────────────────────────────────────
          *

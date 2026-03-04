@@ -37,7 +37,7 @@ export default function ExplorationCard({
     children,
 }) {
     return (
-        <div className="group flex flex-col hover:bg-white/[0.05] transition-colors duration-500 p-8 relative">
+        <div className="group flex flex-col hover:bg-white/[0.05] transition-colors duration-500 p-6 md:p-8 relative">
             {/* ── Visual Area ───────────────────────────────────────────────
        *
        * `aspect-video` maintains a 16:9 ratio regardless of content,

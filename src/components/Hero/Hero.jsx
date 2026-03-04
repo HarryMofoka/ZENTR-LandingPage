@@ -71,31 +71,10 @@ export default function Hero() {
             <HeroItem hiddenOnMobile beamDelay="1.5s" />
             <HeroItem hiddenOnMobile beamDelay="3s" />
 
-            {/* ── Column 4: Menu Button + CTA ──────────────────────────────── */}
+            {/* ── Column 4: CTA ──────────────────────────────────────────── */}
             <HeroItem showBeam={false} className="md:p-8 pt-6 pr-6 pb-6 pl-6">
-                {/* Menu button — positioned at the top-right on desktop */}
-                <div className="flex justify-end md:justify-start">
-                    <button className="flex items-center gap-2 text-xs text-white font-medium hover:text-red-500 transition-colors uppercase tracking-widest border border-white/10 px-4 py-2 rounded-full bg-neutral-900/50 backdrop-blur-sm animate-in">
-                        Menu
-                        {/* Hamburger icon (three horizontal lines) */}
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
-                            <path
-                                fill="none"
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M4 5h16M4 12h16M4 19h16"
-                            />
-                        </svg>
-                    </button>
-                </div>
+                {/* Spacer — top section is now handled by the fixed Navbar */}
+                <div />
 
                 {/* ── CTA Button with Spinning Border ──────────────────────────
          *

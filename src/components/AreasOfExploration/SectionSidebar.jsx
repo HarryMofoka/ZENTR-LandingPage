@@ -56,7 +56,7 @@ export default function SectionSidebar({
             : 'w-max px-6 py-2 border border-white/10 rounded-full text-xs font-medium uppercase tracking-widest hover:bg-white hover:text-black transition-colors reveal-hidden';
 
     return (
-        <div className="p-8 md:col-span-1 flex flex-col justify-between h-full min-h-[400px] bg-white/[0.01]">
+        <div className="p-6 md:p-8 md:col-span-1 flex flex-col justify-between h-full min-h-[280px] md:min-h-[400px] bg-white/[0.01]">
             <div>
                 <span className="font-mono text-red-500 text-xs block mb-4">
                     {label}

@@ -29,7 +29,7 @@ import { memo } from 'react';
 
 export default memo(function TestimonialCard({ quote, initials, name, role }) {
     return (
-        <div className="glass-card w-[450px] p-8 rounded-2xl flex flex-col justify-between shrink-0 hover:border-white/20 transition-all duration-300 group cursor-default">
+        <div className="glass-card w-[320px] md:w-[450px] p-6 md:p-8 rounded-2xl flex flex-col justify-between shrink-0 hover:border-white/20 transition-all duration-300 group cursor-default">
             {/* ── Quote Icon ─────────────────────────────────────────────────
        *
        * A decorative quotation mark icon that transitions to red on hover,

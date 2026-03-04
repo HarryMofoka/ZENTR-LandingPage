@@ -46,7 +46,7 @@ export default function Footer() {
                 />
 
                 {/* Links + Newsletter area */}
-                <div className="p-8 md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="p-6 md:p-8 md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                     <FooterLinks />
                     <Newsletter />
                 </div>
