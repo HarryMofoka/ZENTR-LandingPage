@@ -1,34 +1,24 @@
 /**
  * @file Background.jsx
- * @description Lightweight animated background with shooting stars and
- * orbiting particle field.
+ * @description Animated starfield background with twinkling particles
+ * and randomised shooting stars.
  *
- * ARCHITECTURE
- * ────────────
- * Three visual layers, all lightweight:
+ * LAYERS
+ * ──────
+ * 1. Canvas starfield — 120 twinkling particles across the full viewport
+ * 2. Shooting stars — 5 CSS-animated streaks with fully random directions
+ * 3. Faint centre warmth — barely-visible red radial gradient
  *
- * 1. **Shooting stars** — CSS-animated streaks that appear at random
- *    positions and angles, flying across the viewport. Each star has
- *    randomised delay, duration, and starting position for variety.
- *
- * 2. **Canvas particle field** — ~80 small dots drifting across the
- *    entire viewport (not just the centre), creating a starfield.
- *
- * 3. **Very subtle centre glow** — A faint red radial gradient at the
- *    centre, barely visible, just enough to warm the colour palette.
- *
- * @returns {JSX.Element} The lightweight animated background.
+ * @returns {JSX.Element} The animated background.
  */
 
 import { useEffect, useRef, useState } from 'react';
 
-const PARTICLE_COUNT = 80;
-const SHOOTING_STAR_COUNT = 6;
+const PARTICLE_COUNT = 120;
+const SHOOTING_STAR_COUNT = 5;
 
 /**
- * Create a particle that drifts across the full viewport.
- * Unlike the previous version, particles are NOT locked to orbits —
- * they float freely for a starfield effect.
+ * Create a free-drifting particle.
  */
 function createParticle(w, h) {
     return {
@@ -36,28 +26,33 @@ function createParticle(w, h) {
         y: Math.random() * h,
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.15,
-        size: 0.4 + Math.random() * 1.5,
-        opacity: 0.15 + Math.random() * 0.45,
+        size: 0.3 + Math.random() * 1.8,
+        opacity: 0.1 + Math.random() * 0.5,
         isRed: Math.random() < 0.12,
-        /* Twinkle — particles fade in and out */
-        twinkleSpeed: 0.005 + Math.random() * 0.01,
+        twinkleSpeed: 0.004 + Math.random() * 0.012,
         twinklePhase: Math.random() * Math.PI * 2,
     };
 }
 
 /**
- * Generate random shooting star CSS properties.
- * Each star gets a unique start position, angle, delay, and duration.
+ * Generate shooting stars with fully random directions.
+ *
+ * WHY random angles between 0–360?
+ * ────────────────────────────────
+ * Real shooting stars can streak in any direction. The previous version
+ * only used 20–50° (upper-left to lower-right). Now each star gets a
+ * fully random angle, starting position spread across the viewport,
+ * and varied delay/duration for organic randomness.
  */
 function generateShootingStars() {
     return Array.from({ length: SHOOTING_STAR_COUNT }, (_, i) => ({
         id: i,
-        top: `${5 + Math.random() * 60}%`,
+        top: `${Math.random() * 80}%`,
         left: `${Math.random() * 80}%`,
-        angle: 20 + Math.random() * 30,       // degrees — diagonal
-        delay: `${Math.random() * 12}s`,       // staggered over 12s
-        duration: `${1.5 + Math.random() * 2}s`, // 1.5–3.5s per streak
-        length: `${80 + Math.random() * 120}px`, // streak trail length
+        angle: Math.random() * 360,
+        delay: `${2 + Math.random() * 15}s`,
+        duration: `${2 + Math.random() * 2.5}s`,
+        length: `${60 + Math.random() * 140}px`,
     }));
 }
 
@@ -97,17 +92,13 @@ export default function Background() {
             ctx.clearRect(0, 0, width, height);
 
             particlesRef.current.forEach((p) => {
-                /* Drift */
                 p.x += p.vx;
                 p.y += p.vy;
-
-                /* Wrap around viewport edges */
                 if (p.x < -10) p.x = width + 10;
                 if (p.x > width + 10) p.x = -10;
                 if (p.y < -10) p.y = height + 10;
                 if (p.y > height + 10) p.y = -10;
 
-                /* Twinkle — sinusoidal opacity modulation */
                 const twinkle = 0.5 + 0.5 * Math.sin(time * p.twinkleSpeed + p.twinklePhase);
                 const alpha = p.opacity * twinkle;
 
@@ -132,7 +123,6 @@ export default function Background() {
         };
 
         animate();
-
         return () => {
             cancelAnimationFrame(animFrameRef.current);
             window.removeEventListener('resize', resize);
@@ -141,7 +131,7 @@ export default function Background() {
 
     return (
         <div className="fixed inset-0 -z-10 overflow-hidden">
-            {/* ── Very subtle centre warmth (barely visible) ──────────── */}
+            {/* Faint centre warmth */}
             <div
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20 pointer-events-none"
                 style={{
@@ -149,25 +139,18 @@ export default function Background() {
                 }}
             />
 
-            {/* ── Canvas starfield (fills entire viewport) ───────────── */}
-            <canvas
-                ref={canvasRef}
-                className="absolute inset-0 w-full h-full"
-            />
+            {/* Canvas starfield */}
+            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
-            {/* ── Shooting Stars (pure CSS) ──────────────────────────────
+            {/* ── Shooting Stars ─────────────────────────────────────────
        *
-       * Each star is a small element that flies diagonally across
-       * the viewport with a glowing trail. The trail is achieved
-       * with a linear-gradient background that fades from white
-       * to transparent.
+       * Each star uses the `shoot` CSS keyframe. The animation makes
+       * the star fade in from total invisibility, streak across ~600px
+       * in its randomised direction, then fade out again.
        *
-       * WHY CSS instead of Canvas?
-       * Shooting stars are infrequent, fast-moving elements that
-       * benefit from GPU-accelerated transforms. CSS animations
-       * run on the compositor thread, so they don't compete with
-       * the Canvas particle loop on the main thread.
-       * ──────────────────────────────────────────────────────── */}
+       * The `rotate()` transform sets the travel direction — since
+       * angles are 0–360, stars can fly in any direction.
+       * ──────────────────────────────────────────────────────────── */}
             {stars.map((star) => (
                 <div
                     key={star.id}
@@ -177,11 +160,11 @@ export default function Background() {
                         left: star.left,
                         width: star.length,
                         height: '1px',
-                        transform: `rotate(${star.angle}deg)`,
-                        background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(239,68,68,0.8) 100%)',
+                        background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 40%, rgba(239,68,68,0.7) 100%)',
                         borderRadius: '999px',
-                        boxShadow: '0 0 6px rgba(255,255,255,0.3), 0 0 12px rgba(239,68,68,0.2)',
-                        animation: `shoot ${star.duration} ${star.delay} linear infinite`,
+                        boxShadow: '0 0 4px rgba(255,255,255,0.2), 0 0 10px rgba(239,68,68,0.15)',
+                        animation: `shoot ${star.duration} ${star.delay} ease-in-out infinite`,
+                        transform: `rotate(${star.angle}deg)`,
                         opacity: 0,
                     }}
                 />
