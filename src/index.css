@@ -299,3 +299,43 @@ body {
 .animate-border-spin {
   will-change: transform;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * 8. LIGHTWEIGHT BACKGROUND ANIMATIONS
+ *
+ * These keyframes power the CSS-only planet glow and ambient colour shift
+ * that replaced the heavy Spline iframe and Unicorn Studio WebGL layers.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * pulse-glow — Gentle breathing effect for the planet core.
+ * Alternates between slightly smaller/larger scale to create
+ * a "living" glow without any JS overhead.
+ */
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 0.45;
+  }
+}
+
+/*
+ * colour-drift — Slow positional shift of the ambient overlay.
+ * Creates a subtle, organic colour movement across the viewport.
+ */
+@keyframes colour-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+}

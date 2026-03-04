@@ -9,34 +9,22 @@
   <title>ZENTR — Design Experiment</title>
 
   <!--
-    PERFORMANCE: Preconnect to external CDNs
-    ─────────────────────────────────────────
+    PERFORMANCE: Preconnect to Google Fonts CDNs
+    ─────────────────────────────────────────────
     `<link rel="preconnect">` tells the browser to establish TCP connections
     (DNS lookup + TLS handshake) to these domains BEFORE any resource from
-    them is actually requested. This shaves 100–300ms off the first request
+    them is actually requested. This shaves 100-300ms off the first request
     to each domain because the connection is already warm when the resource
     is needed.
 
-    WHY `crossorigin` on Google Fonts?
+    WHY `crossorigin` on gstatic?
     Google Fonts serves CSS from fonts.googleapis.com and font files from
     fonts.gstatic.com. The `crossorigin` attribute is required for CORS-
     enabled requests (font files use CORS). Without it, the browser may
     open a second connection, negating the preconnect benefit.
-
-    WHY preconnect to cdn.jsdelivr.net?
-    The Unicorn Studio script is loaded from this CDN at runtime.
-    Preconnecting ensures the TLS handshake is done before our deferred
-    script injection runs.
-
-    WHY preconnect to my.spline.design?
-    The Spline 3D iframe loads from this domain. Even though the iframe
-    has `loading="lazy"`, the preconnect ensures the connection is ready
-    by the time the browser starts loading the iframe.
   -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <link rel="preconnect" href="https://my.spline.design" crossorigin />
 </head>
 
 <body>
