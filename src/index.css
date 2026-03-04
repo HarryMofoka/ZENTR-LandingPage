@@ -1,0 +1,249 @@
+/**
+ * @file index.css
+ * @description Global styles for the ZENTR landing page.
+ *
+ * This file serves as the single source of truth for all design tokens,
+ * utility classes, and animation keyframes used across the application.
+ *
+ * STRUCTURE
+ * ─────────
+ * 1. Tailwind CSS v4 import — brings in all utility classes
+ * 2. Google Fonts — imports the three typefaces used in the design system
+ * 3. Tailwind theme extensions — custom fonts, text sizes, animations
+ * 4. Base styles — body defaults, scrollbar, selection
+ * 5. Animation keyframes — beam-drop, border-spin, marquee, fadeInUpBlur
+ * 6. Component utilities — .glass-card, .glass-section, .animate-* helpers
+ *
+ * WHY a single CSS file?
+ * ──────────────────────
+ * All custom animations and glassmorphism effects are shared across many
+ * components. Centralising them here avoids duplication and makes the
+ * design system easy to update in one place.
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * 1. TAILWIND CSS v4 — imports all utility classes via the Vite plugin
+ * ───────────────────────────────────────────────────────────────────────────── */
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * 2. GOOGLE FONTS
+ *
+ * WHY these fonts?
+ * • Inter  — Clean, neutral sans-serif for body text and UI elements.
+ *            Chosen for its excellent readability at small sizes.
+ * • Syne   — Bold, geometric display font for headings and the hero title.
+ *            Its heavy weights create strong visual hierarchy.
+ * • JetBrains Mono — Monospace font used for code fragments and labels
+ *                     (e.g. "/// 01"). Gives a technical, high-fidelity feel.
+ * ───────────────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap');
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * 3. TAILWIND THEME EXTENSIONS
+ *
+ * Tailwind v4 uses CSS-based configuration via @theme.
+ * We declare custom design tokens here so they become available as
+ * utility classes (e.g. `font-syne`, `text-huge`, `animate-beam`).
+ * ───────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* Font families — mapped to Tailwind utilities like `font-syne` */
+  --font-sans: 'Inter', sans-serif;
+  --font-syne: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /*
+   * Custom "huge" text size for the hero title.
+   *
+   * WHY clamp()?
+   * clamp(min, preferred, max) creates a fluid font size that scales
+   * with the viewport width. This removes the need for multiple
+   * breakpoint-based overrides and ensures the hero title always fills
+   * the available space proportionally:
+   * - 3rem   = minimum size on the narrowest viewports
+   * - 11vw   = preferred size (scales linearly with viewport width)
+   * - 20rem  = maximum cap to prevent absurdly large text on ultra-wide screens
+   */
+  --text-huge: clamp(3rem, 11vw, 20rem);
+
+  /* Animation durations and timing functions for Tailwind `animate-*` utilities */
+  --animate-beam: beam-drop 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  --animate-border-spin: border-spin 3s linear infinite;
+  --animate-marquee-infinite: marquee 40s linear infinite;
+  --animate-in: fadeInUpBlur 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * 4. BASE STYLES
+ *
+ * Global defaults applied to the entire document.
+ * ───────────────────────────────────────────────────────────────────────────── */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #050505;
+  color: #e5e5e5;
+}
+
+/*
+ * Custom scrollbar — matches the dark aesthetic of the landing page.
+ * WHY custom scrollbar?
+ * The default browser scrollbar is light-coloured and breaks the immersive
+ * dark theme. A thin, muted scrollbar keeps the user focused on the content.
+ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * 5. ANIMATION KEYFRAMES
+ *
+ * Each keyframe is used by a corresponding `.animate-*` utility class.
+ * They are defined globally because multiple components share them.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * beam-drop — A vertical light beam that slides down column dividers.
+ *
+ * WHY this animation?
+ * The falling beam creates a subtle "scanning" effect on the hero column
+ * borders, reinforcing the high-tech, data-driven design language.
+ * The beam fades in at 50% and fades out at 100% so it appears to
+ * materialise and dissolve smoothly.
+ */
+@keyframes beam-drop {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(500%);
+    opacity: 0;
+  }
+}
+
+/*
+ * border-spin — 360° rotation used for the animated CTA button border.
+ *
+ * WHY?
+ * A conic-gradient border that continuously rotates creates a premium
+ * "loading ring" effect on the "Explore the System" button, drawing
+ * attention without being distracting. The animation is only visible
+ * on hover, keeping the default state clean.
+ */
+@keyframes border-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*
+ * marquee — Horizontal infinite scroll for the logo strip and testimonials.
+ *
+ * WHY translateX(-50%)?
+ * The marquee container duplicates its children. By scrolling exactly 50%
+ * of the total width, the second copy seamlessly takes the place of the
+ * first, creating an infinite loop with no visible "jump".
+ */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/*
+ * fadeInUpBlur — Scroll-triggered reveal animation for headings and buttons.
+ *
+ * WHY blur + translateY?
+ * Starting with a 10px blur and a 20px vertical offset creates a
+ * "focus pull" effect — elements appear to come into focus as they
+ * enter the viewport. This is more cinematic than a simple fade-in
+ * and reinforces the motion-first design language.
+ */
+@keyframes fadeInUpBlur {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * 6. COMPONENT UTILITY CLASSES
+ *
+ * Reusable CSS classes used across multiple React components.
+ * These are not Tailwind utilities — they're custom classes that combine
+ * multiple properties (glassmorphism, animation states, etc.).
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * .glass-card — Frosted-glass card effect.
+ *
+ * WHY glassmorphism?
+ * Glassmorphism (blurred translucent background + subtle border) creates
+ * depth without relying on heavy drop shadows. It allows the animated
+ * Spline/Unicorn Studio background to bleed through, tying the cards
+ * visually to the environment.
+ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/*
+ * .glass-section — Section-level glassmorphism.
+ *
+ * Uses a darker tint and stronger blur than .glass-card to clearly
+ * separate full-width sections from the animated background while
+ * maintaining visual continuity.
+ */
+.glass-section {
+  background: rgba(10, 10, 10, 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/*
+ * .reveal-hidden — Initial hidden state for scroll-reveal elements.
+ *
+ * Elements start invisible and gain the `.animate-in` class when
+ * they enter the viewport via the useRevealAnimation hook.
+ *
+ * WHY opacity: 0 and not display: none?
+ * We need the elements to occupy their layout space even before they
+ * become visible, otherwise the page would "jump" as elements appear.
+ */
+.reveal-hidden {
+  opacity: 0;
+}
+
+/*
+ * Pause the marquee on hover so users can read individual items.
+ * This is a UX best practice for auto-scrolling content.
+ */
+.animate-marquee-infinite:hover {
+  animation-play-state: paused;
+}
