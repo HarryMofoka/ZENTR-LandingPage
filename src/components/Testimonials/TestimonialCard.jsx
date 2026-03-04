@@ -20,10 +20,14 @@
  * @param {string} props.name - Person's full name.
  * @param {string} props.role - Title and company (e.g. "CEO, Apex Dynamics").
  *
+ * PERFORMANCE: React.memo — rendered 4× in the marquee, prevents re-renders.
+ *
  * @returns {JSX.Element} A styled testimonial card.
  */
 
-export default function TestimonialCard({ quote, initials, name, role }) {
+import { memo } from 'react';
+
+export default memo(function TestimonialCard({ quote, initials, name, role }) {
     return (
         <div className="glass-card w-[450px] p-8 rounded-2xl flex flex-col justify-between shrink-0 hover:border-white/20 transition-all duration-300 group cursor-default">
             {/* ── Quote Icon ─────────────────────────────────────────────────
@@ -67,4 +71,4 @@ export default function TestimonialCard({ quote, initials, name, role }) {
             </div>
         </div>
     );
-}
+})

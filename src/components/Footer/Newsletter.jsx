@@ -16,10 +16,14 @@
  * The `<form>` element is used (instead of a plain `<div>`) so that
  * the HTML semantics are correct and screen readers announce it properly.
  *
+ * PERFORMANCE: React.memo — static form, never needs to re-render.
+ *
  * @returns {JSX.Element} The newsletter subscription form.
  */
 
-export default function Newsletter() {
+import { memo } from 'react';
+
+export default memo(function Newsletter() {
     return (
         <div className="col-span-2 md:col-span-2">
             <h4 className="text-white text-xs font-bold uppercase tracking-widest mb-6">
@@ -75,4 +79,4 @@ export default function Newsletter() {
             </form>
         </div>
     );
-}
+})

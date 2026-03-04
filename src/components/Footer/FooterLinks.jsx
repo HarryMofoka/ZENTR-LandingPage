@@ -20,8 +20,12 @@
  * placeholder anchors. When routing is added (e.g. React Router),
  * these can be swapped to `<Link>` components with minimal effort.
  *
+ * PERFORMANCE: React.memo — static link data, never needs to re-render.
+ *
  * @returns {JSX.Element} Two columns of footer links.
  */
+
+import { memo } from 'react';
 
 /**
  * Link data configuration.
@@ -30,7 +34,7 @@
 const SITEMAP_LINKS = ['Experiment', 'Studies', 'Journal'];
 const SOCIAL_LINKS = ['Instagram', 'Twitter', 'LinkedIn'];
 
-export default function FooterLinks() {
+export default memo(function FooterLinks() {
     return (
         <>
             {/* ── Sitemap Column ─────────────────────────────────────────── */}
@@ -72,4 +76,4 @@ export default function FooterLinks() {
             </div>
         </>
     );
-}
+})

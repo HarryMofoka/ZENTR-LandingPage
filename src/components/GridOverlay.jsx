@@ -21,11 +21,18 @@
  * `pointer-events-none` makes the element completely transparent to
  * mouse/touch interactions.
  *
+ * PERFORMANCE: React.memo
+ * ───────────────────────
+ * This component has no props and renders purely static markup.
+ * `React.memo` ensures it's never re-rendered when parent state changes.
+ *
  * @returns {JSX.Element} A transparent grid overlay.
  */
 
-export default function GridOverlay() {
+import { memo } from 'react';
+
+export default memo(function GridOverlay() {
     return (
         <div className="absolute inset-0 z-10 w-full h-full pointer-events-none grid grid-cols-1 border-t border-white/10" />
     );
-}
+})

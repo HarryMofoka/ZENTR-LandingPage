@@ -22,10 +22,14 @@
  * A subtle drop shadow lifts the text visually off the background,
  * improving legibility over the busy 3D scene behind the glass layer.
  *
+ * PERFORMANCE: React.memo — static content, never re-renders.
+ *
  * @returns {JSX.Element} The text banner section.
  */
 
-export default function TextBanner() {
+import { memo } from 'react';
+
+export default memo(function TextBanner() {
     return (
         <section className="relative z-20 w-full border-t border-white/10 glass-section overflow-hidden">
             {/* ── Decorative Grid Overlay ──────────────────────────────────
@@ -59,4 +63,4 @@ export default function TextBanner() {
             </div>
         </section>
     );
-}
+})

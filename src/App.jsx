@@ -23,37 +23,54 @@
  * 8. Testimonials        — Scrolling client testimonial cards
  * 9. Footer              — CTA, links, newsletter, copyright
  *
- * WHY a single flat list of components?
- * ────────────────────────────────────
- * The landing page has a simple linear scroll layout with no routing,
- * nested layouts, or conditional sections. A flat composition makes
- * the render order obvious at a glance and avoids unnecessary wrapper
- * components. If routing or conditional sections are added later,
- * this can be refactored into a layout component with `<Outlet>`.
+ * PERFORMANCE: LAZY LOADING
+ * ─────────────────────────
+ * Sections 5–9 are below the fold (not visible on initial page load).
+ * They are loaded via `React.lazy()` + `Suspense`, which means:
+ * - Their JavaScript is split into separate chunks by Vite/Rollup
+ * - These chunks are only fetched when the browser needs to render them
+ * - This reduces the initial JS bundle, speeding up First Contentful Paint
  *
- * WHY `scroll-smooth` on the `<html>` equivalent?
- * ───────────────────────────────────────────────
- * `scroll-smooth` is set on the wrapping `<div>` (the effective body)
- * via the `scroll-smooth` utility class. This enables smooth-scrolling
- * for any `<a href="#section">` anchor links, improving the user
- * experience when navigating between sections.
+ * WHY not lazy-load Background, GridOverlay, Hero, or LogoMarquee?
+ * ────────────────────────────────────────────────────────────────
+ * These are above-the-fold components visible immediately on page load.
+ * Lazy-loading them would cause a visible flash of empty content (FOUC),
+ * degrading the user experience. They must be in the main bundle.
+ *
+ * WHY an empty `fallback` on Suspense?
+ * ───────────────────────────────────
+ * The glass-section background and dark body mean that an empty fallback
+ * is visually seamless — the user sees the dark background while chunks
+ * load, which happens in milliseconds on any modern connection.
+ * A loading spinner would actually be MORE jarring than the brief empty state.
  *
  * @returns {JSX.Element} The complete ZENTR landing page.
  */
 
-import { useRef } from 'react';
+import { useRef, lazy, Suspense } from 'react';
 import useRevealAnimation from './hooks/useRevealAnimation';
 
-/* ─── Section Components ──────────────────────────────────────────────────── */
+/* ─── Above-the-fold Components (eagerly loaded) ─────────────────────────── */
 import Background from './components/Background';
 import GridOverlay from './components/GridOverlay';
 import Hero from './components/Hero/Hero';
 import LogoMarquee from './components/LogoMarquee/LogoMarquee';
-import AreasOfExploration from './components/AreasOfExploration/AreasOfExploration';
-import TextBanner from './components/TextBanner';
-import Features from './components/Features/Features';
-import Testimonials from './components/Testimonials/Testimonials';
-import Footer from './components/Footer/Footer';
+
+/* ─── Below-the-fold Components (lazy-loaded for performance) ────────────── *
+ *
+ * React.lazy() wraps a dynamic import(), telling Vite to split each
+ * component into its own chunk. The chunk is fetched on-demand when
+ * React first attempts to render the component.
+ *
+ * WHY per-section splitting (not a single lazy chunk)?
+ * Each section is its own chunk so they can load independently.
+ * If one section's chunk is slow, the others still render.
+ * ──────────────────────────────────────────────────────────────────────────── */
+const AreasOfExploration = lazy(() => import('./components/AreasOfExploration/AreasOfExploration'));
+const TextBanner = lazy(() => import('./components/TextBanner'));
+const Features = lazy(() => import('./components/Features/Features'));
+const Testimonials = lazy(() => import('./components/Testimonials/Testimonials'));
+const Footer = lazy(() => import('./components/Footer/Footer'));
 
 export default function App() {
   /**
@@ -80,14 +97,24 @@ export default function App() {
       {/* ── Grid Overlay (absolute, over background) ───────────────── */}
       <GridOverlay />
 
-      {/* ── Page Sections (scrollable content) ─────────────────────── */}
+      {/* ── Above-the-fold Sections (eagerly loaded) ───────────────── */}
       <Hero />
       <LogoMarquee />
-      <AreasOfExploration />
-      <TextBanner />
-      <Features />
-      <Testimonials />
-      <Footer />
+
+      {/* ── Below-the-fold Sections (lazy-loaded) ──────────────────── *
+       *
+       * Wrapped in a single <Suspense> boundary. If any lazy component
+       * hasn't loaded yet, React renders the fallback (empty fragment)
+       * for the entire group, then swaps in the real content once all
+       * chunks have loaded.
+       * ──────────────────────────────────────────────────────────────── */}
+      <Suspense fallback={null}>
+        <AreasOfExploration />
+        <TextBanner />
+        <Features />
+        <Testimonials />
+        <Footer />
+      </Suspense>
     </div>
   );
 }

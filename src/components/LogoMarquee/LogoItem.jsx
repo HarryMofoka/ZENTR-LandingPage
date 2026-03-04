@@ -19,10 +19,17 @@
  * @param {string} props.label - The text label displayed beside the icon.
  * @param {React.ReactNode} props.children - SVG inner content (`<path>`, `<g>`, etc.).
  *
+ * PERFORMANCE: React.memo
+ * ───────────────────────
+ * LogoItem is rendered 14 times (7 items × 2 duplicates for seamless loop).
+ * memo prevents all 14 instances from re-rendering when parent state changes.
+ *
  * @returns {JSX.Element} A styled icon + label pair.
  */
 
-export default function LogoItem({ label, children }) {
+import { memo } from 'react';
+
+export default memo(function LogoItem({ label, children }) {
     return (
         <div className="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 group">
             {/* ── Icon Container ─────────────────────────────────────────────
@@ -47,4 +54,4 @@ export default function LogoItem({ label, children }) {
             </span>
         </div>
     );
-}
+})

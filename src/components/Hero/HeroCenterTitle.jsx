@@ -29,10 +29,14 @@
  * viewports. On mobile devices, the hero description text and CTA button
  * serve as the primary entry point instead.
  *
+ * PERFORMANCE: React.memo — static brand title, never needs to re-render.
+ *
  * @returns {JSX.Element} The centred hero title.
  */
 
-export default function HeroCenterTitle() {
+import { memo } from 'react';
+
+export default memo(function HeroCenterTitle() {
     return (
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-10 pointer-events-none hidden md:block">
             <h1 className="text-huge leading-[0.85] text-white tracking-tighter font-syne font-semibold opacity-90 mix-blend-plus-lighter animate-in">
@@ -40,4 +44,4 @@ export default function HeroCenterTitle() {
             </h1>
         </div>
     );
-}
+})
