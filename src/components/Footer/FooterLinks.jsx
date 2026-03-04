@@ -5,20 +5,8 @@
  * PURPOSE
  * ───────
  * Renders two link columns:
- * 1. **Sitemap** — Internal navigation links (Experiment, Studies, Journal)
- * 2. **Socials** — External social media links (Instagram, Twitter, LinkedIn)
- *
- * WHY a separate component?
- * ─────────────────────────
- * Extracting the link columns from the Footer keeps the Footer component
- * focused on overall layout, while this component handles the specific
- * link data and hover styles.
- *
- * WHY `#` hrefs?
- * ─────────────
- * This is a single-page landing page with no routing. The links are
- * placeholder anchors. When routing is added (e.g. React Router),
- * these can be swapped to `<Link>` components with minimal effort.
+ * 1. **Sitemap** — Internal navigation links using React Router
+ * 2. **Socials** — External social media links
  *
  * PERFORMANCE: React.memo — static link data, never needs to re-render.
  *
@@ -26,12 +14,17 @@
  */
 
 import { memo } from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * Link data configuration.
- * Centralised here for easy updates and potential internationalisation.
+ * Sitemap uses React Router paths; socials remain external anchors.
  */
-const SITEMAP_LINKS = ['Experiment', 'Studies', 'Journal'];
+const SITEMAP_LINKS = [
+    { label: 'Experiment', to: '/experiment' },
+    { label: 'Studies', to: '/studies' },
+    { label: 'Journal', to: '/journal' },
+];
 const SOCIAL_LINKS = ['Instagram', 'Twitter', 'LinkedIn'];
 
 export default memo(function FooterLinks() {
@@ -44,13 +37,13 @@ export default memo(function FooterLinks() {
                 </h4>
                 <ul className="space-y-3">
                     {SITEMAP_LINKS.map((link) => (
-                        <li key={link}>
-                            <a
-                                href="#"
+                        <li key={link.label}>
+                            <Link
+                                to={link.to}
                                 className="text-neutral-500 text-sm hover:text-white transition-colors"
                             >
-                                {link}
-                            </a>
+                                {link.label}
+                            </Link>
                         </li>
                     ))}
                 </ul>
